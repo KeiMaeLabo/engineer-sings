@@ -11,93 +11,23 @@
 
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet">
         <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="text-warning title m-b-md">
-                    Laravel
-                </div>
-                <div id="app">
-                    @{{ message }}
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">ドキュメント</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+        <div class="content" id="app">
+            <div class="left-content">
+            </div>
+            <div class="main-content">
+                <label for="input-video">動画を選択</label>
+                <input id="input-video" type="file" accept="*.mov" v-on:change="handleFileSelect">
+                <video controls>
+                    <source :src="src" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                </video>
+            </div>
+            <div class="right-content">
             </div>
         </div>
     </body>
@@ -105,7 +35,24 @@
         new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!'
+                src: null
+            },
+            methods: {
+                handleFileSelect(event) {
+                    // reset data
+                    this.src = null
+                    
+                    // validate file
+                    const file = event.target.files[0]
+                    if (!file || !file.type.match('video/*')) return
+
+                    // read file
+                    const reader = new FileReader()
+                    reader.onload = (evt) => {
+                        this.src = evt.target.result
+                    }
+                    reader.readAsDataURL(file)
+                }
             }
         })
     </script>
