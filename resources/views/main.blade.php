@@ -22,9 +22,9 @@
             </div>
             <div class="main-content">
                 <label for="input-video">動画を選択</label>
-                <input id="input-video" type="file" accept="*.mov" v-on:change="handleFileSelect">
-                <video controls>
-                    <source :src="src" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                <input id="input-video" type="file" accept="video/*" v-on:change="handleFileSelect">
+                <video controls v-if="src" muted>
+                    <source :src="src" type='video/mp4; codecs="avc1.64001E,mp4a.40.2"'>
                 </video>
             </div>
             <div class="right-content">
@@ -40,18 +40,18 @@
             methods: {
                 handleFileSelect(event) {
                     // reset data
-                    this.src = null
-                    
-                    // validate file
-                    const file = event.target.files[0]
-                    if (!file || !file.type.match('video/*')) return
+                    this.src = null;
 
-                    // read file
-                    const reader = new FileReader()
-                    reader.onload = (evt) => {
-                        this.src = evt.target.result
+                    // validate file
+                    const file = event.target.files[0];
+                    if (file.type.match('video/*')) {
+                        // read file
+                        const fileReader = new FileReader();
+                        fileReader.onload = (evt) => {
+                            this.src = evt.target.result;
+                        }
+                        fileReader.readAsDataURL(file);
                     }
-                    reader.readAsDataURL(file)
                 }
             }
         })
