@@ -7,6 +7,15 @@ html, body {
   margin: 0;
 }
 
+button{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  appearance: none;
+}
+
 .content {
   display: flex;
 }
@@ -14,7 +23,7 @@ html, body {
 .left-content {
   width: 10vw;
   height: 100vh;
-  background-color: aqua;
+  background-color: #CCCCCC;
 }
 
 .main-content {
@@ -25,11 +34,46 @@ html, body {
 .right-content {
   width: 10vw;
   height: 100vh;
-  background-color: aquamarine;
+  background-color: #CCCCCC;
 }
 
 video {
   width: 80vw;
 }
 
+#input-video {
+  display: none;
+}
 
+.buttons {
+  width: 50px;
+  height: 50px;
+  color: #333333;
+  border-radius: 5px;
+  background-image: linear-gradient(to top left,
+                                      rgba(0, 0, 0, .2),
+                                      rgba(0, 0, 0, .2) 30%,
+                                      rgba(0, 0, 0, 0));
+  box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+                inset -2px -2px 3px rgba(0, 0, 0, .6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.buttons:hover {
+  background-image: linear-gradient(to top left,
+                                      rgba(0, 0, 0, .2),
+                                      rgba(145, 141, 141, 0.2) 30%,
+                                      rgba(0, 0, 0, 0));
+}
+
+.buttons:active {
+  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .6),
+                inset -1px -1px 1px rgba(0, 0, 0, .6);
+}
+
+.modal-dialog {
+  max-width: 70vw;
+}
