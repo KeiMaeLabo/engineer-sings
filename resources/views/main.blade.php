@@ -48,7 +48,7 @@
                     <label for="song" class="col-1">song <i class="fas fa-user"></i></label><input type="text" id="song" class="col-3">
                 </div>
                 <label for="playtime" class="col-1">playtime</label><input type="text" id="playtime"class="col-1">
-                <textarea class="col-12" style="height:40vh"></textarea>
+                <textarea class="col-12" style="height:50vh"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">save <i class="far fa-save"></i></button>
