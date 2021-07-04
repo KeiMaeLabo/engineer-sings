@@ -16,10 +16,6 @@ button{
   appearance: none;
 }
 
-.content {
-  display: flex;
-}
-
 .left-content {
   width: 10vw;
   height: 100vh;
@@ -39,10 +35,6 @@ button{
 
 video {
   width: 80vw;
-}
-
-#input-video {
-  display: none;
 }
 
 .buttons {
