@@ -51,6 +51,7 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0.5rem;
   cursor: pointer;
 }
 
@@ -68,4 +69,8 @@ video {
 
 .modal-dialog {
   max-width: 80vw;
+}
+
+.modal-header {
+  padding: 1rem 0rem;
 }
