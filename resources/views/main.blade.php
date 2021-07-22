@@ -40,7 +40,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title col-1" id="songModal">Song</h5>
                     <select id="song" class="form-control col-5" v-on:change="changeSong" v-model="id">
-                        <option value="" selected>new</option>
+                        <option value="new">new</option>
                         <option v-for="song in songs" v-bind:value="song.id">
                             @{{ song.title }} @{{ song.artist }}
                         </option>
@@ -61,7 +61,7 @@
                     <div class="row">
                         <label for="title" class="form-label col-1">title</label>
                         <input type="text" id="title" class="form-control form-control-sm col-5" v-model="title">
-                        <button type="button" class="btn btn-success btn-sm ml-5">Get lyric <i class="far fa-file-alt"></i></button>
+                        <button type="button" class="btn btn-success btn-sm ml-5" v-on:click="getLyric">Get lyric <i class="far fa-file-alt"></i></button>
                     </div>
                     <div class="row">
                         <label for="artist" class="form-label col-1">artist <i class="fas fa-user"></i></label>
@@ -90,7 +90,7 @@
             data: {
                 src: null,
                 song: null,
-                id: null,
+                id: 'new',
                 title: null,
                 artist: null,
                 playtime: null,
@@ -128,7 +128,7 @@
                     this.songs = response.data;
                 },
                 changeSong: async function(event) {
-                    if (event.target.value != '') {
+                    if (event.target.value != 'new') {
                         const song = this.songs.find((song) => song.id == event.target.value);
                         this.title = song.title;
                         this.artist = song.artist;
@@ -140,7 +140,17 @@
                         this.playtime = '';
                         this.lyric = '';
                     }
-                }
+                },
+                getLyric: async function() {
+                    const song = {
+                        'title': this.title,
+                        'artist': this.artist,
+                    }
+                    const response = await axios.post('/song/get-lyric', song);
+                    const result = JSON.parse(JSON.stringify(response.data));
+                    console.log(result.output.lyric);
+                    this.lyric = result.output.lyric;
+                },
             }
         })
     </script>
