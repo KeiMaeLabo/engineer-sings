@@ -1,3 +1,7 @@
+[v-cloak] {
+  display: none;
+}
+
 html, body {
   background-color: #fff;
   color: #636b6f;
@@ -73,4 +77,48 @@ video {
 
 .modal-header {
   padding: 1rem 0rem;
+}
+
+#selected_song {
+  width: 100%;
+  height: 29px;
+  background-color: black;
+  font-size: 18px;
+  color: goldenrod;
+  letter-spacing: 1px;
+  vertical-align: middle;
+}
+
+#select {
+  position: absolute;
+  right: 10%;
+  top: 0;
+}
+
+#lyric_display {
+  width: 80vw;
+  height: 90vh;
+  font-weight: 700;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-size: 30px;
+  letter-spacing: 2px;
+  text-align: center;
+  white-space: pre-wrap;
+
+  position: absolute;
+  /*top: -3000px;
+  animation: slideUp 10s linear forwards; jsで付与*/
+  text-shadow: 
+    2px  2px 1px #ffffff,
+    -2px  2px 1px #ffffff,
+    2px -2px 1px #ffffff,
+    -2px -2px 1px #ffffff,
+    2px  0px 1px #ffffff,
+    0px  2px 1px #ffffff,
+    -2px  0px 1px #ffffff,
+    0px -2px 1px #ffffff;
+}
+
+@keyframes slideUp {
+  0% { top: 90vh; }
 }

@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('main');
-});
-
+Route::get('/', 'SongController@index');
 Route::post('/song/store', 'SongController@store');
 Route::get('/song/get-list', 'SongController@getSongList');
 Route::post('/song/get-lyric', 'SongController@getLyric');

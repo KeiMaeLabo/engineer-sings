@@ -4,10 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>An engineer sings</title>
         <script src="{{ asset('js/app.js') }}"></script>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
         <!-- Styles -->
         <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
@@ -26,11 +27,23 @@
                     <button type="button" id="lyric" class="buttons" data-toggle="modal" data-target="#songModal" v-on:click="getSongList"><i class="fas fa-edit"></i></button>
                 </div>
                 <div class="main-content">
-                    <video controls v-if="src" muted>
+                    <div id="selected_song">
+                    <i class="fab fa-itunes-note mx-2"></i><span v-if="song" v-cloak>@{{ song.title }} - @{{ song.artist }}</span>
+                    </div>
+                    <video controls v-if="src" muted v-cloak>
                         <source :src="src" type='video/mp4; codecs="avc1.64001E,mp4a.40.2"'>
                     </video>
+                    <div id="lyric_display" ref="lyric" v-if="song" v-bind:style="animationObject" v-html="lyricDom" v-cloak></div>
                 </div>
                 <div class="right-content">
+                    <button type="button" id="lyric" class="buttons" v-on:click="showSelect"><i class="fas fa-align-left"></i></button>
+                    <select id="select" class="form-control form-control-sm col-2" v-if="showSelectBox" v-on:change="showSong" v-model="selected_id" aria-hidden="true" v-cloak>
+                        <option v-for="song in songs" v-bind:value="song.id">
+                            @{{ song.title }} - @{{ song.artist }}
+                        </option>
+                    </select>
+                    <button type="button" id="lyric_play" class="buttons" v-on:click="playLyric"><i class="fas fa-align-right"></i></button>
+
                 </div>
             </div>
             <!-- Modal -->
@@ -42,7 +55,7 @@
                     <select id="song" class="form-control col-5" v-on:change="changeSong" v-model="id">
                         <option value="new">new</option>
                         <option v-for="song in songs" v-bind:value="song.id">
-                            @{{ song.title }} @{{ song.artist }}
+                            @{{ song.title }}<span> - </span>@{{ song.artist }}
                         </option>
                     </select>
                     <button type="button" class="close col-1" data-dismiss="modal" aria-label="Close">
@@ -97,6 +110,10 @@
                 lyric: null,
                 message: null,
                 songs: null,
+                selected_id: null,
+                showSelectBox: false,
+                animationObject: null,
+                lyricDom: null,
             },
             methods: {
                 handleFileSelect(event) {
@@ -109,6 +126,15 @@
                         }
                         fileReader.readAsDataURL(file);
                     }
+                },
+                showSelect() {
+                    this.showSelectBox = !this.showSelectBox;
+                },
+                showSong() {
+                    const song = this.songs.find((song) => song.id == this.selected_id);
+                    this.song = song;
+                    this.lyricDom = `<div id="lyric_dom">${song.lyric}</div>`;
+                    this.showSelectBox = false;
                 },
                 storeSong: async function() {
                     const song = {
@@ -145,12 +171,23 @@
                     const song = {
                         'title': this.title,
                         'artist': this.artist,
-                    }
+                    };
                     const response = await axios.post('/song/get-lyric', song);
                     const result = JSON.parse(JSON.stringify(response.data));
                     console.log(result.output.lyric);
                     this.lyric = result.output.lyric;
                 },
+                playLyric() {
+                    const seconds = parseInt(this.song.playtime.split(':')[0]) * 60 + parseInt(this.song.playtime.split(':')[1]);
+                    const height = this.$refs.lyric.firstChild.offsetHeight;
+                    this.animationObject = {
+                        top: `${height * -1}px`,
+                        animation: `slideUp 10s linear forwards`,
+                    };
+                }
+            },
+            mounted() {
+                this.getSongList();
             }
         })
     </script>

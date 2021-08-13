@@ -11,7 +11,7 @@ class SongController extends Controller
 {
     public function index()
     {
-
+        return view('main');
     }
 
     public function getSongList()
