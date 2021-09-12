@@ -43,12 +43,11 @@
                         </option>
                     </select>
                     <button type="button" id="lyric_play" class="buttons" v-on:click="playLyric"><i class="fas fa-align-right"></i></button>
-
                 </div>
             </div>
-            <!-- Modal -->
+            <!-- songModal -->
             <div class="modal fade" id="songModal" tabindex="-1" role="dialog" aria-labelledby="songModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered main-modal" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title col-1" id="songModal">Song</h5>
@@ -91,6 +90,10 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary btn-lg" v-on:click="storeSong">save <i class="far fa-save"></i></button>
+                    <button type="button" class="btn btn-danger ml-3" v-if="deleteToggle" v-show="!deleteFlag" v-on:click="switchDeleteFlag">delete <i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-danger ml-3" v-if="deleteToggle" v-show="deleteFlag" v-on:click="deleteSong">delete <i class="fas fa-trash-alt"></i></button>
+                    <p v-if="deleteFlag">If you are sure to delete this song, press [delete <i class="fas fa-trash-alt"></i>] again.</p>
+                    <button v-if="deleteFlag" type="button" class="btn btn-primary btn-sm" v-on:click="switchDeleteFlag">cancel</button>
                 </div>
                 </div>
             </div>
@@ -114,6 +117,8 @@
                 showSelectBox: false,
                 animationObject: null,
                 lyricDom: null,
+                deleteToggle: false,
+                deleteFlag: false,
             },
             methods: {
                 handleFileSelect(event) {
@@ -148,6 +153,31 @@
                     this.message = response.data.message;
                     console.log(this.message);
                     this.getSongList();
+                    if (response.data.id) {
+                        this.id = response.data.id;
+                        this.deleteToggle = true;
+                    }
+                },
+                deleteSong: async function() {
+                    this.switchDeleteFlag();
+                    const song = {
+                        'id': this.id
+                    };
+                    if (song.id != 'new') {
+                        const response = await axios.post('/song/delete', song);
+                        this.id = 'new';
+                        this.title = '';
+                        this.artist = '';
+                        this.playtime = '';
+                        this.lyric = '';
+                        this.message = response.data.message;
+                        console.log(this.message);
+                        this.deleteToggle = false;
+                        this.getSongList();
+                    }
+                },
+                switchDeleteFlag() {
+                    this.deleteFlag = !this.deleteFlag;
                 },
                 getSongList: async function() {
                     const response = await axios.get('/song/get-list');
@@ -160,12 +190,16 @@
                         this.artist = song.artist;
                         this.playtime = song.playtime;
                         this.lyric = song.lyric;
+                        this.deleteToggle = true;
                     } else {
+                        this.id = 'new';
                         this.title = '';
                         this.artist = '';
                         this.playtime = '';
                         this.lyric = '';
+                        this.deleteToggle = false;
                     }
+                    this.deleteFlag = false;
                 },
                 getLyric: async function() {
                     const song = {
@@ -182,7 +216,7 @@
                     const height = this.$refs.lyric.firstChild.offsetHeight;
                     this.animationObject = {
                         top: `${height * -1}px`,
-                        animation: `slideUp 10s linear forwards`,
+                        animation: `slideUp ${seconds}s linear forwards`,
                     };
                 }
             },

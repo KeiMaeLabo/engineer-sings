@@ -15,3 +15,4 @@ Route::get('/', 'SongController@index');
 Route::post('/song/store', 'SongController@store');
 Route::get('/song/get-list', 'SongController@getSongList');
 Route::post('/song/get-lyric', 'SongController@getLyric');
+Route::post('/song/delete', 'SongController@delete');

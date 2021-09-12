@@ -29,12 +29,19 @@ class SongController extends Controller
             $song->playtime = $request->playtime;
             $song->lyric = $request->lyric;
             $song->save();
-            return [ 'message' => 'registered'];
+            return [ 'id' => $song->id,'message' => 'registered'];
         } else {
             $song = Song::find($request->id);
             $song->fill($request->all())->update();
             return [ 'message' => 'updated'];
         }
+    }
+
+    public function delete(Request $request)
+    {
+        $song = Song::find($request->id);
+        $song->delete();
+        return [ 'message' => 'deleted'];
     }
 
     public function getLyric(Request $request)
