@@ -24,7 +24,7 @@
                 <div class="left-content">
                     <label for="input-video" class="buttons"><i class="fas fa-video"></i></label>
                     <input id="input-video" class="d-none" type="file" accept="video/*" v-on:change="handleFileSelect">
-                    <button type="button" id="lyric" class="buttons" data-toggle="modal" data-target="#songModal" v-on:click="getSongList"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="buttons" data-toggle="modal" data-target="#songModal" v-on:click="getSongList"><i class="fas fa-edit"></i></button>
                 </div>
                 <div class="main-content">
                     <div id="selected_song">
@@ -36,7 +36,7 @@
                     <div id="lyric_display" ref="lyric" v-if="song" v-bind:style="animationObject" v-html="lyricDom" v-cloak></div>
                 </div>
                 <div class="right-content">
-                    <button type="button" id="lyric" class="buttons" v-on:click="showSelect"><i class="fas fa-align-left"></i></button>
+                    <button type="button" class="buttons" v-on:click="showSelect"><i class="fas fa-align-left"></i></button>
                     <select id="select" class="form-control form-control-sm col-2" v-if="showSelectBox" v-on:change="showSong" v-model="selected_id" aria-hidden="true" v-cloak>
                         <option v-for="song in songs" v-bind:value="song.id">
                             @{{ song.title }} - @{{ song.artist }}
@@ -85,7 +85,12 @@
                     </div>
                     <div class="row">
                         <label class="form-label col-1">lyric</label>
-                        <textarea id="lyric" class="form-control form-control-sm col-10" style="height:55vh" v-model="lyric"></textarea>
+                        <textarea id="lyric" class="form-control form-control-sm col-8" style="height:55vh" v-model="lyric"></textarea>
+                        <div class="d-block col-1">
+                            <button type="button" class="btn btn-light edit-buttons"><i class="fas fa-sort-alpha-down"></i></button>
+                            <button type="button" class="btn btn-light edit-buttons" v-on:click="addLineSpacing"><i class="fas fa-level-down-alt"></i></button>
+                            <button type="button" class="btn btn-light edit-buttons" v-on:click="removeLineSpacing"><i class="fas fa-level-up-alt"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -218,6 +223,35 @@
                         top: `${height * -1}px`,
                         animation: `slideUp ${seconds}s linear forwards`,
                     };
+                },
+                addLineSpacing() {
+                    const text  = this.lyric.replace(/\r\n|\r/g, "\n");
+                    const lines = text.split('\n');
+                    let outLines = [];
+                    for (let i=0; i<lines.length; i++) {
+                        let line = '';
+                        if (lines[i] === '') {
+                            line = lines[i];
+                        } else {
+                            line = lines[i] + "\n";
+                        }
+                        outLines.push(line);
+                    }
+                    this.lyric = outLines.join('\n');
+                },
+                removeLineSpacing() {
+                    const text  = this.lyric.replace(/\r\n|\r/g, "\n");
+                    const lines = text.split('\n');
+                    let outLines = [];
+                    for (let i=0; i<lines.length; i++) {
+                        let line = '';
+                        if (lines[i] === '' && lines[i-1] !== '') {
+
+                        } else {
+                            outLines.push(lines[i]);
+                        }
+                    }
+                    this.lyric = outLines.join('\n');
                 }
             },
             mounted() {

@@ -122,3 +122,10 @@ video {
 @keyframes slideUp {
   0% { top: 90vh; }
 }
+
+.edit-buttons {
+  width: 40px;
+  height: 40px;
+  margin: 20px 0 0 10px;
+  border: solid 1px #c0c0c0;
+}
