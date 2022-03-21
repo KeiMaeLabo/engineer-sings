@@ -21,19 +21,17 @@
     <body>
         <div id="app">
             <div class="container-fluid d-flex p-0">
-                <div class="left-content">
-                    <label for="input-video" class="buttons"><i class="fas fa-video"></i></label>
-                    <input id="input-video" class="d-none" type="file" accept="video/*" v-on:change="handleFileSelect">
-                    <button type="button" class="buttons" data-toggle="modal" data-target="#songModal" v-on:click="getSongList"><i class="fas fa-edit"></i></button>
-                </div>
                 <div class="main-content">
                     <div id="selected_song">
-                    <i class="fab fa-itunes-note mx-2"></i><span v-if="song" v-cloak>@{{ song.title }} - @{{ song.artist }}</span>
+                        <i class="fab fa-itunes-note mx-2"></i><span v-if="song" v-cloak>@{{ song.title }} - @{{ song.artist }}</span>
                     </div>
-                    <video controls v-if="src" muted v-cloak>
-                        <source :src="src" type='video/mp4; codecs="avc1.64001E,mp4a.40.2"'>
-                    </video>
-                    <div id="lyric_display" ref="lyric" v-if="song" v-bind:style="animationObject" v-html="lyricDom" v-cloak></div>
+                    <div class="display-area">
+                        <video controls v-if="src" muted v-cloak>
+                            <source :src="src" type='video/mp4; codecs="avc1.64001E,mp4a.40.2"'>
+                        </video>
+                        <div id="lyric_display" ref="lyric" v-if="song" v-bind:style="animationObject" v-html="lyricDom" v-cloak></div>
+                    </div>
+                    <div class="footer"></div>
                 </div>
                 <div class="right-content">
                     <button type="button" class="buttons" v-on:click="showSelect"><i class="fas fa-align-left"></i></button>
@@ -43,6 +41,9 @@
                         </option>
                     </select>
                     <button type="button" id="lyric_play" class="buttons" v-on:click="playLyric"><i class="fas fa-align-right"></i></button>
+                    <label for="input-video" class="buttons"><i class="fas fa-video"></i></label>
+                    <input id="input-video" class="d-none" type="file" accept="video/*" v-on:change="handleFileSelect">
+                    <button type="button" class="buttons" data-toggle="modal" data-target="#songModal" v-on:click="getSongList"><i class="fas fa-edit"></i></button>
                 </div>
             </div>
             <!-- songModal -->
@@ -219,6 +220,7 @@
                 playLyric() {
                     const seconds = parseInt(this.song.playtime.split(':')[0]) * 60 + parseInt(this.song.playtime.split(':')[1]);
                     const height = this.$refs.lyric.firstChild.offsetHeight;
+                    console.log(this.$refs.lyric.firstChild.offsetHeight);
                     this.animationObject = {
                         top: `${height * -1}px`,
                         animation: `slideUp ${seconds}s linear forwards`,
